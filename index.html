@@ -1,0 +1,428 @@
+!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jarurat Care Connect — Patient &amp; Volunteer Support</title>
+    <meta name="description" content="A support portal for patients seeking help and volunteers who want to serve, with a built-in FAQ assistant." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root{
+        --bg: #F1F4EC;
+        --surface: #FFFFFF;
+        --pine: #1B4B43;
+        --pine-dark: #123330;
+        --marigold: #E8A33D;
+        --marigold-dark: #C6812A;
+        --ink: #22302C;
+        --ink-soft: #5B6B63;
+        --line: #DDE3D6;
+        --radius: 14px;
+        --shadow: 0 8px 24px rgba(27,75,67,0.08);
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+        margin:0;
+        background:var(--bg);
+        color:var(--ink);
+        font-family:'Inter', sans-serif;
+        line-height:1.55;
+    }
+    h1,h2,h3{
+        font-family:'Fraunces', serif;
+        color:var(--pine-dark);
+        margin:0 0 .4em 0;
+        font-weight:600;
+    }
+    a{color:var(--pine);}
+    .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
+
+    /* thread motif - a stitched connecting line used as a section divider */
+    .thread{
+        width:100%; height:14px; margin:0 0;
+    }
+    .thread svg{width:100%; height:100%; display:block;}
+
+    header.top{
+        padding:28px 0 10px;
+    }
+    header.top .wrap{
+        display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    }
+    .brand{
+        display:flex; align-items:center; gap:10px;
+    }
+    .brand .mark{
+        width:38px; height:38px; border-radius:10px;
+        background:var(--pine);
+        display:flex; align-items:center; justify-content:center;
+    }
+    .brand .mark svg{width:20px;height:20px;}
+    .brand-text{font-family:'Fraunces', serif; font-weight:600; font-size:1.15rem; color:var(--pine-dark); line-height:1.1;}
+    .brand-text small{display:block; font-family:'Inter',sans-serif; font-weight:500; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft);}
+    nav a{
+        font-size:.88rem; font-weight:500; text-decoration:none; color:var(--ink-soft); margin-left:20px;
+    }
+    nav a:hover{color:var(--pine);}
+
+    .hero{padding:54px 0 30px;}
+    .eyebrow{
+        display:inline-block; font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+        color:var(--marigold-dark); background:rgba(232,163,61,0.14); padding:5px 12px; border-radius:100px; margin-bottom:16px;
+    }
+    .hero h1{font-size:clamp(1.9rem, 4vw, 2.7rem); max-width:14ch;}
+    .hero p.lede{font-size:1.05rem; color:var(--ink-soft); max-width:52ch; margin:14px 0 0;}
+
+    .choice-row{display:flex; gap:16px; margin-top:32px; flex-wrap:wrap;}
+    .choice-card{
+        flex:1 1 240px; background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius);
+        padding:20px; cursor:pointer; transition:border-color .18s, transform .18s, box-shadow .18s; text-align:left;
+    }
+    .choice-card:hover{transform:translateY(-2px); box-shadow:var(--shadow);}
+    .choice-card.active{border-color:var(--pine); box-shadow:var(--shadow);}
+    .choice-card .icon{
+        width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:12px;
+    }
+    .choice-card.patient .icon{background:rgba(27,75,67,0.1);}
+    .choice-card.volunteer .icon{background:rgba(232,163,61,0.16);}
+    .choice-card h3{font-size:1.05rem; margin-bottom:4px;}
+    .choice-card p{font-size:.86rem; color:var(--ink-soft); margin:0;}
+
+    section.form-section{padding:36px 0 60px;}
+    .form-card{
+        background:var(--surface); border-radius:20px; box-shadow:var(--shadow); padding:32px; border:1px solid var(--line);
+    }
+    .form-card h2{font-size:1.4rem;}
+    .form-card .sub{color:var(--ink-soft); font-size:.92rem; margin-bottom:22px;}
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+    @media (max-width:600px){.grid-2{grid-template-columns:1fr;}}
+    .field{margin-bottom:16px;}
+    .field label{display:block; font-size:.82rem; font-weight:600; margin-bottom:6px; color:var(--pine-dark);}
+    .field input, .field select, .field textarea{
+        width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:10px; font-family:inherit; font-size:.95rem;
+        background:#FCFDFA; color:var(--<ink); transition:border-color .15s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus{
+        outline:none; border-color:var(--pine);
+    }
+    .field textarea{resize:vertical; min-height:90px;}
+    .req{color:var(--marigold-dark);}
+
+    button.primary{
+        background:var(--pine); color:#fff; border:none; padding:13px 26px; border-radius:100px; font-size:.95rem; font-weight:600;
+        cursor:pointer; transition:background .15s, transform .12s; font-family:'Inter',sans-serif;
+    }
+    button.primary:hover{background:var(--pine-dark);}
+    button.primary:active{transform:scale(.98);}
+
+    .status-msg{
+        margin-top:16px; padding:12px 14px; border-radius:10px; font-size:.88rem; display:none;
+    }
+    .status-msg.show{display:block;}
+    .status-msg.ok{background:rgba(27,75,67,0.08); color:var(--pine-dark); border:1px solid rgba(27,75,67,0.2);}
+    .status-msg.err{background:rgba(200,60,60,0.08); color:#a33; border:1px solid rgba(200,60,60,0.2);}
+
+    footer{padding:30px 0 50px; text-align:center; color:var(--ink-soft); font-size:.85rem;}
+    footer a{color:var(--pine); font-weight:600; text-decoration:none;}
+
+    /* Chatbot */
+    #chat-toggle{
+        position:fixed; bottom:24px; right:24px; width:58px; height:58px; border-radius:50%;
+        background:var(--marigold); border:none; box-shadow:0 6px 18px rgba(232,163,61,0.45);
+        cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:60; transition:transform .15s;
+    }
+    #chat-toggle:hover{transform:scale(1.06);}
+    #chat-toggle svg{width:26px; height:26px;}
+
+    #chat-panel{
+        position:fixed; bottom:92px; right:24px; width:340px; max-width:calc(100vw - 32px); height:440px; max-height:calc(100vh - 140px);
+        background:var(--surface); border-radius:18px; box-shadow:0 14px 40px rgba(0,0,0,0.18); display:none; flex-direction:column;
+        overflow:hidden; z-index:60; border:1px solid var(--line);
+    }
+    #chat-panel.open{display:flex;}
+    .chat-head{
+        background:var(--pine); color:#fff; padding:14px 16px; display:flex; align-items:center; gap:10px;
+    }
+    .chat-head .dot{width:8px; height:8px; border-radius:50%; background:#7ee0a0;}
+    .chat-head strong{font-family:'Fraunces', serif; font-size:.95rem;}
+    .chat-head span{display:block; font-size:.7rem; opacity:.8;}
+    .chat-body{flex:1; padding:14px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; background:#FAFBF7;}
+    .msg{max-width:82%; padding:9px 12px; border-radius:12px; font-size:.86rem; line-height:1.4;}
+    .msg.bot{background:#EFEEE7; color:var(--ink); align-self:flex-start; border-bottom-left-radius:3px;}
+    .msg.user{background:var(--pine); color:#fff; align-self:flex-end; border-bottom-right-radius:3px;}
+    .chips{display:flex; flex-wrap:wrap; gap:6px; padding:0 14px 10px;}
+    .chip{
+        font-size:.75rem; background:#fff; border:1px solid var(--line); padding:6px 10px; border-radius:100px; cursor:pointer; color:var(--pine-dark);
+    }
+    .chip:hover{border-color:var(--pine);}
+    .chat-input{display:flex; border-top:1px solid var(--line); padding:8px;}
+    .chat-input input{
+        flex:1; border:none; padding:9px 10px; font-family:inherit; font-size:.87rem; outline:none; background:transparent;
+    }
+    .chat-input button{
+        background:var(--pine); color:#fff; border:none; border-radius:8px; padding:0 14px; cursor:pointer; font-weight:600;
+    }
+    </style>
+    </head>
+    <body>
+
+    <header class="top">
+    <div class="wrap">
+        <div class="brand">
+        <div class="mark">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.4C.4 7.8 2.5 4 6.3 4c2 0 3.6 1.1 4.4 2.7C11.5 5.1 13.1 4 15.1 4c3.8 0 5.9 3.8 4.3 7.6C19.5 16.4 12 21 12 21Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="brand-text">Jarurat Care Connect<small>A Jarurat Care Foundation initiative</small></div>
+        </div>
+        <nav>
+        <a href="#form">Get support</a>
+        <a href="#form">Volunteer</a>
+        </nav>
+    </div>
+    </header>
+
+    <div class="thread">
+    <svg viewBox="0 0 400 14" preserveAspectRatio="none"><path d="M0 7 Q 20 0, 40 7 T 80 7 T 120 7 T 160 7 T 200 7 T 240 7 T 280 7 T 320 7 T 360 7 T 400 7" stroke="#C9D6BE" stroke-width="1.5" fill="none"/></svg>
+    </div>
+
+    <section class="hero">
+    <div class="wrap">
+        <span class="eyebrow">Care, one form away</span>
+        <h1>Ask for help, or offer it — either way, we'll respond.</h1>
+        <p class="lede">Jarurat Care Connect is a single place for people who need patient support and people who want to volunteer their time. Tell us which one you are, and our assistant or team will follow up.</p>
+
+        <div class="choice-row">
+        <div class="choice-card patient active" data-type="patient" onclick="selectType('patient')">
+            <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.4C.4 7.8 2.5 4 6.3 4c2 0 3.6 1.1 4.4 2.7C11.5 5.1 13.1 4 15.1 4c3.8 0 5.9 3.8 4.3 7.6C19.5 16.4 12 21 12 21Z" stroke="#1B4B43" stroke-width="1.6"/></svg></div>
+            <h3>I need patient support</h3>
+            <p>Request help with treatment guidance, medicine access, or connecting to care.</p>
+        </div>
+        <div class="choice-card volunteer" data-type="volunteer" onclick="selectType('volunteer')">
+            <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#C6812A" stroke-width="1.6"/><circle cx="9" cy="7" r="3.5" stroke="#C6812A" stroke-width="1.6"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#C6812A" stroke-width="1.6"/></svg></div>
+            <h3>I want to volunteer</h3>
+            <p>Register your time and skills to support patients and NGO programs.</p>
+        </div>
+        </div>
+    </div>
+    </section>
+
+    <section class="form-section" id="form">
+    <div class="wrap">
+        <div class="form-card">
+        <h2 id="form-title">Patient support request</h2>
+        <p class="sub" id="form-sub">Share a few details and our team will reach out — usually within 24–48 hours.</p>
+
+        <form id="support-form" onsubmit="handleSubmit(event)">
+            <div class="grid-2">
+            <div class="field">
+                <label>Full name <span class="req">*</span></label>
+                <input type="text" name="full_name" required />
+            </div>
+            <div class="field">
+                <label>Phone number <span class="req">*</span></label>
+                <input type="tel" name="phone" required pattern="[0-9+ ]{7,15}" />
+            </div>
+            </div>
+            <div class="grid-2">
+            <div class="field">
+                <label>Email</label>
+                <input type="email" name="email" />
+            </div>
+            <div class="field">
+                <label>City</label>
+                <input type="text" name="city" placeholder="e.g. Jaipur" />
+            </div>
+            </div>
+
+            <div class="field" id="patient-only">
+            <label>What kind of support do you need? <span class="req">*</span></label>
+            <select name="support_type" id="support_type">
+                <option value="">Select one</option>
+                <option>Medicine access</option>
+                <option>Treatment / hospital guidance</option>
+                <option>Financial assistance</option>
+                <option>Emotional / counselling support</option>
+                <option>Other</option>
+            </select>
+            </div>
+
+            <div class="field" id="volunteer-only" style="display:none;">
+            <label>How would you like to help? <span class="req">*</span></label>
+            <select name="volunteer_skill" id="volunteer_skill">
+                <option value="">Select one</option>
+                <option>Medical / clinical background</option>
+                <option>Fundraising</option>
+                <option>Content / social media</option>
+                <option>Tech / development</option>
+                <option>On-ground volunteering</option>
+                <option>Other</option>
+            </select>
+            </div>
+
+            <div class="field">
+            <label id="message-label">Tell us more <span class="req">*</span></label>
+            <textarea name="message" required placeholder="Briefly describe your situation or how you'd like to contribute."></textarea>
+            </div>
+
+            <input type="hidden" name="request_type" id="request_type" value="patient" />
+
+            <button type="submit" class="primary" id="submit-btn">Submit request</button>
+            <div class="status-msg" id="status-msg"></div>
+        </form>
+        </div>
+    </div>
+    </section>
+
+    <footer>
+    <div class="wrap">
+        Built for the <strong>Jarurat Care Foundation</strong> internship assignment · Have a quick question? Use the assistant in the corner →
+    </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <button id="chat-toggle" onclick="toggleChat()" aria-label="Open FAQ assistant">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-4-.99L3 20l1.05-3.86A8.5 8.5 0 1 1 21 11.5Z" stroke="#123330" stroke-width="1.7" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div id="chat-panel">
+    <div class="chat-head">
+        <span class="dot"></span>
+        <div><strong>Care Assistant</strong><span>Rule-based FAQ helper · replies instantly</span></div>
+    </div>
+    <div class="chat-body" id="chat-body"></div>
+    <div class="chips" id="chat-chips"></div>
+    <form class="chat-input" onsubmit="handleChatSubmit(event)">
+        <input type="text" id="chat-input" placeholder="Ask about volunteering, support, timelines…" />
+        <button type="submit">Send</button>
+    </form>
+    </div>
+
+    <script>
+    /* ---------- Config: fill these in to store submissions in Supabase ---------- */
+    const SUPABASE_URL = "";        // e.g. "https://xxxx.supabase.co"
+    const SUPABASE_ANON_KEY = "";   // Supabase anon/public key
+    const SUPABASE_TABLE = "care_requests";
+
+    /* ---------- Form: patient / volunteer toggle ---------- */
+    function selectType(type){
+    document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('active'));
+    document.querySelector('.choice-card.' + type).classList.add('active');
+    document.getElementById('request_type').value = type;
+
+    const isPatient = type === 'patient';
+    document.getElementById('patient-only').style.display = isPatient ? 'block' : 'none';
+    document.getElementById('volunteer-only').style.display = isPatient ? 'none' : 'block';
+    document.getElementById('support_type').required = isPatient;
+    document.getElementById('volunteer_skill').required = !isPatient;
+
+    document.getElementById('form-title').textContent = isPatient ? 'Patient support request' : 'Volunteer registration';
+    document.getElementById('form-sub').textContent = isPatient
+        ? "Share a few details and our team will reach out — usually within 24–48 hours."
+        : "Tell us your skills and availability — we'll match you to an active program.";
+    document.getElementById('message-label').innerHTML = (isPatient ? "Tell us more" : "Availability & why you'd like to help") + ' <span class="req">*</span>';
+    document.getElementById('submit-btn').textContent = isPatient ? 'Submit request' : 'Register as volunteer';
+    }
+
+    async function handleSubmit(e){
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.created_at = new Date().toISOString();
+
+    const statusEl = document.getElementById('status-msg');
+    statusEl.className = 'status-msg show';
+
+    try{
+        if(SUPABASE_URL && SUPABASE_ANON_KEY){
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(data)
+        });
+        if(!res.ok) throw new Error('Supabase insert failed');
+        } else {
+        // Demo fallback: store locally so the flow is fully testable without backend setup
+        const existing = JSON.parse(localStorage.getItem('care_requests') || '[]');
+        existing.push(data);
+        localStorage.setItem('care_requests', JSON.stringify(existing));
+        }
+        statusEl.classList.add('ok');
+        statusEl.classList.remove('err');
+        statusEl.textContent = "Thank you — we've received your " + (data.request_type === 'patient' ? 'request' : 'registration') + ". Our team will contact you shortly.";
+        form.reset();
+        selectType(data.request_type);
+    }catch(err){
+        statusEl.classList.add('err');
+        statusEl.classList.remove('ok');
+        statusEl.textContent = "Something went wrong submitting this. Please try again in a moment.";
+    }
+    }
+
+    /* ---------- Rule-based FAQ chatbot (AI/automation concept) ---------- */
+    const FAQ = [
+    { keys: ['volunteer','join','help out','sign up'], a: "You can register as a volunteer using the form above — choose 'I want to volunteer', pick your skill area, and share your availability. Our team reviews registrations weekly." },
+    { keys: ['patient','support','medicine','treatment','hospital'], a: "For patient support, select 'I need patient support' in the form, choose the type of help you need, and describe your situation briefly. We typically respond within 24–48 hours." },
+    { keys: ['time','how long','respond','reply','follow up'], a: "Most requests get a response within 24–48 hours. Urgent medical situations should also contact local emergency services directly." },
+    { keys: ['donate','donation','fund','contribute money'], a: "This form is for support requests and volunteering. For donations, please reach out to Jarurat Care Foundation directly through their official contact channels." },
+    { keys: ['contact','phone','email','reach'], a: "Once you submit the form, our team will reach you using the phone number or email you provide — so please double check those before submitting." },
+    { keys: ['data','privacy','safe','information'], a: "Your details are only used to follow up on your request or registration and aren't shared outside the NGO's care team." },
+    ];
+
+    const CHIPS = ["How do I volunteer?", "What support is offered?", "How long is the response time?", "Is my data safe?"];
+
+    function addMsg(text, who){
+    const body = document.getElementById('chat-body');
+    const div = document.createElement('div');
+    div.className = 'msg ' + who;
+    div.textContent = text;
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+    }
+
+    function botReply(text){
+    const lower = text.toLowerCase();
+    const hit = FAQ.find(f => f.keys.some(k => lower.includes(k)));
+    addMsg(hit ? hit.a : "I couldn't quite match that to an FAQ yet — try asking about volunteering, patient support, response times, or data privacy. For anything else, the team will follow up after you submit the form.", 'bot');
+    }
+
+    function handleChatSubmit(e){
+    e.preventDefault();
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if(!text) return;
+    addMsg(text, 'user');
+    input.value = '';
+    setTimeout(() => botReply(text), 300);
+    }
+
+    function renderChips(){
+    const wrap = document.getElementById('chat-chips');
+    wrap.innerHTML = '';
+    CHIPS.forEach(c => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip';
+        chip.textContent = c;
+        chip.onclick = () => { addMsg(c, 'user'); setTimeout(() => botReply(c), 300); };
+        wrap.appendChild(chip);
+    });
+    }
+
+    function toggleChat(){
+    const panel = document.getElementById('chat-panel');
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open') && document.getElementById('chat-body').children.length === 0){
+        addMsg("Hi! I'm the Care Assistant. Ask me about volunteering, patient support, or how this form works.", 'bot');
+        renderChips();
+    }
+    }
+    </script>
+    </body>
+    </html>
